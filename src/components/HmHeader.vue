@@ -16,7 +16,6 @@ export default {}
 
 <style lang="less" scoped>
 .hm-header {
-  width: 100%;
   height: 40px;
   line-height: 40px;
   border-bottom: 1px solid #ccc;
