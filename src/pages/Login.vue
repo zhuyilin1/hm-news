@@ -19,10 +19,15 @@
       ref="password"
     ></hm-input>
     <hm-button @click="login">登录</hm-button>
+    <div class="go-register">
+      没有账号？去
+      <router-link to="/register">注册</router-link>
+    </div>
   </div>
 </template>
 
 <script>
+import { log } from 'util'
 // import axios from 'axios'
 export default {
   methods: {
@@ -54,6 +59,11 @@ export default {
       })
     }
   },
+  created() {
+    console.log(this.$route)
+    this.username = this.$route.params.username
+    this.password = this.$route.params.password
+  },
   data() {
     return {
       username: '',
@@ -63,4 +73,10 @@ export default {
 }
 </script>
 
-<style></style>
+<style scoped>
+.go-register {
+  font-size: 14px;
+  float: right;
+  padding-right: 20px;
+}
+</style>
