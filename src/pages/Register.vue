@@ -44,14 +44,14 @@ export default {
     }
   },
   methods: {
-    register() {
+    async register() {
       let status1 = this.$refs.username.validate(this.username)
       let status2 = this.$refs.password.validate(this.password)
       let status3 = this.$refs.nickname.validate(this.nickname)
       if (!status1 || !status2 || !status3) {
         return
       }
-      this.$axios({
+      const res = await this.$axios({
         method: 'post',
         url: '/register',
         data: {
@@ -59,23 +59,22 @@ export default {
           nickname: this.nickname,
           password: this.password
         }
-      }).then(res => {
-        if (res.data.statusCode === 200) {
-          this.$toast.success(res.data.message)
-          // 使用query获取参数
-          // this.$router.push({
-          //   path: '/login',
-          //   query: { username: this.username, password: this.password }
-          // })
-          // 使用params获取参数
-          this.$router.push({
-            name: 'login',
-            params: { username: this.username, password: this.password }
-          })
-        } else {
-          this.$toast.fail(res.data.message)
-        }
       })
+      if (res.data.statusCode === 200) {
+        this.$toast.success(res.data.message)
+        // 使用query获取参数
+        // this.$router.push({
+        //   path: '/login',
+        //   query: { username: this.username, password: this.password }
+        // })
+        // 使用params获取参数
+        this.$router.push({
+          name: 'login',
+          params: { username: this.username, password: this.password }
+        })
+      } else {
+        this.$toast.fail(res.data.message)
+      }
     }
   }
 }

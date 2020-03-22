@@ -31,7 +31,7 @@ import { log } from 'util'
 // import axios from 'axios'
 export default {
   methods: {
-    login() {
+    async login() {
       this.$refs.username.validate(this.username)
       this.$refs.password.validate(this.password)
       if (
@@ -41,26 +41,28 @@ export default {
         return
       }
       // console.log('登录')
-      this.$axios({
+      const res = await this.$axios({
         method: 'POST',
         url: '/login',
         data: {
           username: this.username,
           password: this.password
         }
-      }).then(res => {
-        console.log(res.data)
-        if (res.data.statusCode === 200) {
-          this.$toast.success('登录成功')
-          this.$router.push('/user')
-        } else {
-          this.$toast.fail('用户名或密码失败')
-        }
       })
+      // console.log(res.data)
+      const { statusCode, data, message } = res.data
+      if (statusCode === 200) {
+        localStorage.setItem('token', data.token)
+        localStorage.setItem('userid', data.user.id)
+        this.$toast.success(message)
+        this.$router.push('/user')
+      } else {
+        this.$toast.fail(message)
+      }
     }
   },
   created() {
-    console.log(this.$route)
+    // console.log(this.$route)
     this.username = this.$route.params.username
     this.password = this.$route.params.password
   },
